@@ -1,0 +1,31 @@
+﻿@model BookingApplication.Models.DTO.BookingListDTO
+
+@{
+    ViewData["Title"] = "Index";
+    if (Model == null) return;
+
+    var myList = new List<SelectListItem>();
+    foreach(var item in Model.SelectReservations)
+    {
+        myList.Add(new SelectListItem{Value = item.Id.ToString(),Text = item.Apartment.ApartmentName});
+    }
+    var finalList = new SelectList(myList, "Value","Text");
+}
+<p>
+    <a asp-action="NewBookingList">New Booking List</a>
+</p>
+<form asp-action="AddBookReservation">
+        <select name="reservationId" class="form-control" asp-items="@finalList"></select>
+        <label for="numberOfNights">Number of nights</label>
+        <input name="numberOfNights" type="number" />
+        <input type="submit" valud="Add" />
+</form>
+<p>
+    Total Price: @Model.TotalPrice MKD
+</p>
+@foreach(var item in Model.BookReservations)
+{
+    <div class="row">
+        <p>@item.Reservation.Apartment.ApartmentName - @item.NumberOfNights Nights - @item.Reservation.Apartment.Price_per_night MKD</p>
+    </div>
+}
